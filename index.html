@@ -283,76 +283,72 @@
     </div>
   </section>
 
-  <!-- Contact Section -->
-  <section id="contact" class="contact">
-    <div class="container">
-      <div class="section-header">
-        <span class="badge">Get In Touch</span>
-        <h2>Ready to Start Your Project?</h2>
-        <p>Contact us today for a free consultation and quote. We're here to bring your construction vision to life.</p>
-      </div>
+<!-- Contact Section -->
+<section id="contact" class="contact">
+  <div class="container">
+    <div class="section-header">
+      <span class="badge">Get In Touch</span>
+      <h2>Ready to Start Your Project?</h2>
+      <p>Contact us today for a free consultation and quote. We're here to bring your construction vision to life.</p>
+    </div>
 
-      <div class="contact-content">
-        <!-- Contact Form -->
-        <div class="contact-form-container">
-          <div class="card">
-            <h3>Send Us a Message</h3>
-            <p>Fill out the form below and we'll get back to you within 24 hours.</p>
+    <div class="contact-content">
+      <!-- Contact Form -->
+      <div class="contact-form-container">
+        <div class="card">
+          <h3>Send Us a Message</h3>
+          <p>Fill out the form below and we'll get back to you within 24 hours.</p>
+          
+          <!-- ✅ Updated Form with Formspree -->
+          <form id="contact-form" class="contact-form" action="https://formspree.io/f/yourFormID" method="POST">
+            <div class="form-row">
+              <div class="form-group">
+                <label for="name">Full Name</label>
+                <input type="text" id="name" name="name" required>
+                <span class="error-message" id="name-error"></span>
+              </div>
+              <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" name="phone" required>
+                <span class="error-message" id="phone-error"></span>
+              </div>
+            </div>
             
-            <form id="contact-form" class="contact-form">
-              <div class="form-row">
-                <div class="form-group">
-                  <label for="name">Full Name</label>
-                  <input type="text" id="name" name="name" required>
-                  <span class="error-message" id="name-error"></span>
-                </div>
-                <div class="form-group">
-                  <label for="phone">Phone Number</label>
-                  <input type="tel" id="phone" name="phone" required>
-                  <span class="error-message" id="phone-error"></span>
-                </div>
-              </div>
-              
-              <div class="form-group">
-                <label for="email">Email Address</label>
-                <input type="email" id="email" name="email" required>
-                <span class="error-message" id="email-error"></span>
-              </div>
-              
-              <div class="form-group">
-                <label for="service">Service Interested In</label>
-                <select id="service" name="service" required>
-                  <option value="">Select a service</option>
-                  <option value="security-windows">Security Windows</option>
-                  <option value="doors">Premium Doors</option>
-                  <option value="house-boats">House Boats</option>
-                  <option value="consultation">General Consultation</option>
-                </select>
-                <span class="error-message" id="service-error"></span>
-              </div>
-              
-              <div class="form-group">
-                <label for="message">Project Details</label>
-                <textarea id="message" name="message" rows="4" placeholder="Tell us about your project requirements..."></textarea>
-              </div>
+            <div class="form-group">
+              <label for="email">Email Address</label>
+              <input type="email" id="email" name="email" required>
+              <span class="error-message" id="email-error"></span>
+            </div>
+            
+            <div class="form-group">
+              <label for="service">Service Interested In</label>
+              <select id="service" name="service" required>
+                <option value="">Select a service</option>
+                <option value="security-windows">Security Windows</option>
+                <option value="doors">Premium Doors</option>
+                <option value="house-boats">House Boats</option>
+                <option value="consultation">General Consultation</option>
+              </select>
+              <span class="error-message" id="service-error"></span>
+            </div>
+            
+            <div class="form-group">
+              <label for="message">Project Details</label>
+              <textarea id="message" name="message" rows="4" placeholder="Tell us about your project requirements..." required></textarea>
+            </div>
 
-              <div class="form-progress hidden">
-                <div class="progress-text">
-                  <span>Submitting...</span>
-                  <span class="progress-percentage">0%</span>
-                </div>
-                <div class="progress-bar">
-                  <div class="progress-fill"></div>
-                </div>
-              </div>
-              
-              <button type="submit" class="btn btn-primary btn-full">
-                <span class="btn-text">Send Message <i class="fas fa-arrow-right"></i></span>
-                <span class="btn-loading hidden">Sending...</span>
-              </button>
-            </form>
-          </div>
+            <p id="form-status" style="margin-bottom: 10px; display: none;"></p>
+
+            <button type="submit" class="btn btn-primary btn-full">
+              <span class="btn-text">Send Message <i class="fas fa-arrow-right"></i></span>
+              <span class="btn-loading hidden">Sending...</span>
+            </button>
+          </form>
         </div>
+      </div>
+    </div>
+  </div>
+</section>
 
         <!-- Contact Information -->
         <div class="contact-info">
@@ -478,6 +474,40 @@
       </div>
     </div>
   </footer>
+  <!-- ✅ Form Submission Script -->
+<script>
+  const form = document.getElementById('contact-form');
+  const status = document.getElementById('form-status');
+  const btnText = form.querySelector(".btn-text");
+  const btnLoading = form.querySelector(".btn-loading");
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    btnText.classList.add("hidden");
+    btnLoading.classList.remove("hidden");
+
+    const data = new FormData(form);
+    const response = await fetch(form.action, {
+      method: form.method,
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    });
+
+    btnText.classList.remove("hidden");
+    btnLoading.classList.add("hidden");
+
+    if (response.ok) {
+      form.reset();
+      status.style.display = "block";
+      status.style.color = "green";
+      status.textContent = "✅ Message sent successfully!";
+    } else {
+      status.style.display = "block";
+      status.style.color = "red";
+      status.textContent = "❌ Something went wrong. Please try again.";
+    }
+  });
+</script>
 
   <script src="script.js"></script>
 </body>
